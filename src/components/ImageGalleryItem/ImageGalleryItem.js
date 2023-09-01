@@ -1,6 +1,7 @@
 import { Modal } from 'components/Modal/Modal';
 
 import React, { Component } from 'react';
+import { Image } from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends Component {
   state = {
@@ -10,10 +11,12 @@ export class ImageGalleryItem extends Component {
   openModal = evt => {
     evt.preventDefault();
     this.setState({ isModalOpen: true });
+    document.body.style.overflow = 'hidden';
   };
 
   closeModal = () => {
     this.setState({ isModalOpen: false });
+    document.body.style.overflow = 'auto';
   };
 
   render() {
@@ -23,21 +26,10 @@ export class ImageGalleryItem extends Component {
     return (
       <>
         <a href="##" onClick={this.openModal}>
-          <img src={image.webformatURL} alt={image.tags} width="300" />
+          <Image src={image.webformatURL} alt={image.tags} />
         </a>
         {isModalOpen && <Modal image={image} onClose={this.closeModal} />}
       </>
     );
   }
 }
-
-// export default ImageGalleryItem
-
-// export const ImageGalleryItem = ({ image }) => {
-//   return (
-//     <>
-//       <img src={image.webformatURL} alt={image.tags} width="300" />
-//       <Modal image={image} />
-//     </>
-//   );
-// };

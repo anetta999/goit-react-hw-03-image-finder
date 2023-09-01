@@ -1,9 +1,13 @@
+import toast, { Toaster } from 'react-hot-toast';
 import React, { Component } from 'react';
 import { Button } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 import { fetchImagesByQuery } from '../services/api';
 import { Loader } from './Loader/Loader';
+import { GlobalStyle } from './Globalstyle';
+import { Container } from './Container';
+import { GallerySection } from './Section';
 
 export class App extends Component {
   state = {
@@ -17,7 +21,10 @@ export class App extends Component {
     const searchQuery = evt.currentTarget.elements.query.value;
 
     if (!searchQuery.trim()) {
-      alert('Searchfield cannot be empty, please enter some text');
+      toast.error('Searchfield cannot be empty, please enter some text', {
+        duration: 3000,
+      });
+
       return;
     }
 
@@ -45,11 +52,8 @@ export class App extends Component {
           this.state.page
         );
         this.setState({ images: hits, totalHits: totalHits });
-
-        // console.log(images);
       } catch (error) {
         this.setState({ error: true });
-        console.log(error);
       } finally {
         this.setState({ isLoading: false });
       }
@@ -67,15 +71,30 @@ export class App extends Component {
     const lastPage = Math.ceil(totalHits / 12);
 
     return (
-      <div>
+      <>
         <Searchbar onSubmit={this.handleSumbit} />
-        {isLoading && <Loader />}
-        {error && <p>Something went wrong, please try reloading the page</p>}
-        {images.length > 0 && <ImageGallery images={images} />}
-        {images.length > 0 && page < lastPage && !isLoading && (
-          <Button onLoadMore={this.handleLoadMore} />
-        )}
-      </div>
+        <GallerySection>
+          <Container>
+            {isLoading && <Loader />}
+            {error &&
+              !isLoading &&
+              toast.error(
+                'Something went wrong, please try reloading the page',
+                {
+                  duration: 5000,
+                }
+              )}
+            {images.length > 0 && !isLoading && (
+              <ImageGallery images={images} />
+            )}
+            {images.length > 0 && page < lastPage && !isLoading && (
+              <Button onLoadMore={this.handleLoadMore} />
+            )}
+          </Container>
+        </GallerySection>
+        <GlobalStyle />
+        <Toaster position="top-right" />
+      </>
     );
   }
 }
