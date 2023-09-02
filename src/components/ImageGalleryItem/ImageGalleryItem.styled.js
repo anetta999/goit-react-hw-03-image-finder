@@ -6,3 +6,7 @@ export const Image = styled.img`
   object-fit: cover;
   overflow: hidden;
 `;
+
+export const ImageWrap = styled.div`
+  cursor: pointer;
+`;

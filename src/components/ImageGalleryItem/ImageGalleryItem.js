@@ -1,34 +1,31 @@
 import { Modal } from 'components/Modal/Modal';
 
 import React, { Component } from 'react';
-import { Image } from './ImageGalleryItem.styled';
+import { Image, ImageWrap } from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends Component {
   state = {
     isModalOpen: false,
   };
 
-  openModal = evt => {
-    evt.preventDefault();
-    this.setState({ isModalOpen: true });
-    document.body.style.overflow = 'hidden';
-  };
-
-  closeModal = () => {
-    this.setState({ isModalOpen: false });
-    document.body.style.overflow = 'auto';
+  toggleModal = () => {
+    this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
   };
 
   render() {
     const { image } = this.props;
     const { isModalOpen } = this.state;
 
+    isModalOpen
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = 'auto');
+
     return (
       <>
-        <a href="##" onClick={this.openModal}>
+        <ImageWrap onClick={this.toggleModal}>
           <Image src={image.webformatURL} alt={image.tags} />
-        </a>
-        {isModalOpen && <Modal image={image} onClose={this.closeModal} />}
+        </ImageWrap>
+        {isModalOpen && <Modal image={image} onClose={this.toggleModal} />}
       </>
     );
   }
