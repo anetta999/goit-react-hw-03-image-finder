@@ -88,9 +88,7 @@ export class App extends Component {
                   duration: 5000,
                 }
               )}
-            {images.length > 0 && !isLoading && (
-              <ImageGallery images={images} />
-            )}
+            {images.length > 0 && <ImageGallery images={images} />}
             {images.length > 0 && lastPage > 1 && !isLoading && (
               <Button onLoadMore={this.handleLoadMore} />
             )}
